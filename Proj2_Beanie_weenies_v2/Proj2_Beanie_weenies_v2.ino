@@ -10,41 +10,67 @@ Fable: Jack & The Giant Beanstalk
 #include<Servo.h>
 
 //VARIABLES
-Servo myServo;
-const int buttonPin = 7;
-int buttonState = 0;
-int lastButtonState = 0;
+Servo beanStalk;
+const int beanStalkPin = 13;
+Servo speechBubble;
+const int speechBubPin = 10;
+int buttonStateBean = 0;
+int buttonStateSpeech = 0;
+int lastButtonStateBean = 0;
+int lastButtonStateSpeech = 0;
+int counter = 0;
 
 void setup() {
   // put your setup code here, to run once:
-  myServo.attach(9); //using .attach to initialize servo to pin 9
-  pinMode(buttonPin, INPUT);
+  beanStalk.attach(12); //using .attach to initialize servo to pin 9
+  pinMode(beanStalkPin, INPUT);
+  speechBubble.attach(9);
+  pinMode(speechBubPin, INPUT);
   Serial.begin(9600);
 
   
 }
 
 void loop() {
- 
-  // put your main code here, to run repeatedly:
-  //if button is pressed, swivel servo 180 degrees
 
-  buttonState = digitalRead(buttonPin);
+  buttonStateBean = digitalRead(beanStalkPin);
 
-  if (buttonState != lastButtonState){
-     if (digitalRead(buttonPin) == HIGH){
-    myServo.write(180);
+/* code for the beanstalk servo */
+if (counter == 0) {
+  beanStalk.write(0);
+  counter ++;
+  } else {
+    }
+  if (buttonStateBean != lastButtonStateBean){
+    beanStalk.write(0);
+     if (digitalRead(beanStalkPin) == HIGH){
+    beanStalk.write(120);
     } else {
-      myServo.write(0);
+      beanStalk.write(0);
     }    
   }
-//Down here is to reset the button state so that you can perform the action again if you place the switch on back again
-  lastButtonState = buttonState;
-  //maybe add a counter to make it only do it once and not again, think about it.
+ Serial.println(counter);
+  lastButtonStateBean = buttonStateBean;
 
+
+/* For the speech bubble */
+  buttonStateSpeech = digitalRead(speechBubPin);
+  if (buttonStateSpeech != lastButtonStateSpeech){
+    speechBubble.write(0);
+     if (digitalRead(speechBubPin) == HIGH){
+    speechBubble.write(180);
+    } else {
+      speechBubble.write(0);
+    }    
+  }
+  lastButtonStateSpeech = buttonStateSpeech;
+
+
+//Down here is to reset the button state so that you can perform the action again if you place the switch on back again
+  //maybe add a counter to make it only do it once and not again, think about it.
   //Checkout the StateChangeDetection by going to File>Examples>Digital>StateChangeDetection
 
 //This is to check our switch in the serial monitor to see if its recieving any power (0 = no power, 1 = yes power)
-Serial.println(digitalRead(buttonPin));
+//Serial.println(digitalRead(beanStalkPin));
 
 }
